@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.friends.dao.DynamicMapper">
+
+    <sql id="Base_Column_List">
+        id,
+		user_id as userId,
+		content,
+		area_code as areaCode,
+		like_count as likeCount,
+		week_like_count as weekLikeCount,
+		detail_addr as detailAddr,
+		comment_count as commentCount,
+		enable,
+		type,
+		picture_list as pictureList,
+		video_list as videoList,
+		province,
+		city,
+		area,
+		address,
+		addtime
+    </sql>
+
+    <sql id="userOrganizationJoins">
+    </sql>
+
+    <select
+        id="findMomentMessageList"
+        resultType="com.friends.entity.Dynamic">
+        select
+        <include refid="Base_Column_List"/>
+        from fc_dynamic
+       <where>
+       	enable = 0
+       	<if test="userIds!=null and userIds!=''">
+       		and user_id in 
+       		 <foreach item="userId" collection="userIds.split(',')" separator="," open="(" close=")" index="">
+		      	#{userId}
+		     </foreach>
+       	</if>
+       	<if test="content !=null and content !=''">
+       		and content ilike CONCAT('%', #{content}, '%')
+       	</if>
+       	<if test="type !=null and type !=''">
+       		and type = #{type}
+       	</if>
+       	<if test="province !=null and province !=''">
+       		and province = #{province}
+       	</if>
+       		<if test="city !=null and city !=''">
+       		and city = #{city}
+       	</if>
+       		<if test="area !=null and area !=''">
+       		and area = #{area}
+       	</if>
+       </where>
+       order by addtime desc
+    </select>
+    
+    <select
+        id="findMomentMessagetById"
+        resultType="com.friends.entity.Dynamic">
+        select
+        <include refid="Base_Column_List"/>
+        from fc_dynamic 
+       <where>
+       		id =  #{id}
+       </where>
+    </select>
+
+    <insert id="insert">
+        insert into fc_dynamic (
+	        id,
+			user_id,
+			content,
+			area_code,
+			like_count,
+			week_like_count,
+			detail_addr,
+			comment_count,
+			enable,
+			type,
+			picture_list,
+			video_list,
+			province,
+			city,
+			area,
+			address,
+			addtime
+        )value(
+            #{id},
+            #{userId},
+            #{content},
+            #{areaCode},
+            #{likeCount},
+            #{weekLikeCount},
+            #{detailAddr},
+            #{commentCount},
+            #{enable},
+            #{type},
+            #{pictureList},
+            #{videoList},
+            #{province},
+            #{city},
+            #{area},
+            #{address},
+            #{addtime}
+        )
+    </insert>
+
+    <update id="deleteById">
+        update fc_dynamic
+        set enable = ${enable},del_time=${delTime}
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    
+    <update id="updateDynamicById">
+        update fc_dynamic
+        <set>
+        	<if test="commentCount!=null and commentCount!=0 ">
+        		comment_count =${commentCount}
+        	</if>
+        	<if test="likeCount!=null and likeCount!=0 ">
+        		,like_count=${likeCount}
+        		
+        	</if>
+        	<if test="weekLikeCount!=null and weekLikeCount!=0 ">
+        		,week_like_count=${weekLikeCount}
+        	</if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    
+    <update id="clearWeekLikeCount">
+        update fc_dynamic
+        <set>
+        	week_like_count=0
+        </set>
+    </update>
+
+
+</mapper>

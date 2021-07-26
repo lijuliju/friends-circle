@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.friends.dao.UserInfoMapper">
+
+    <sql id="Base_Column_List">
+        user_id as userId,
+		addtime,
+		push_count as pushCount,
+		praised_count as praisedCount
+    </sql>
+    
+    <select id="getUserDetailById" resultType="com.friends.entity.UserInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from fc_user_info
+       <where>
+       	user_id =#{userId}
+       </where>
+    </select>
+    
+    <insert id="insertUserInfo">
+        insert into fc_user_info (
+	        user_id,
+			addtime,
+			push_count,
+			praised_count
+        )value(
+            #{userId},
+            #{addtime},
+            #{pushCount},
+            #{praisedCount}
+        )
+    </insert>
+    
+    <update id="updateUserInfoById">
+        update fc_user_info
+        <set>
+        	<if test="pushCount!=null and pushCount!=0 ">
+        		push_count =${pushCount}
+        	</if>
+        	<if test="praisedCount!=null and praisedCount!=0 ">
+        		,praised_count=${praisedCount}
+        	</if>
+        </set>
+        <where>
+            user_id = #{userId}
+        </where>
+    </update>
+
+</mapper>

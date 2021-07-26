@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.friends.dao.DynamicCommentMapper">
+
+    <sql id="Base_Column_List">
+        id,
+		dyna_id as dynaId,
+		user_id as userId,
+		content,
+		addtime
+    </sql>
+
+    <sql id="userOrganizationJoins">
+    </sql>
+
+    <select
+        id="findDynamicCommentList"
+        resultType="com.friends.entity.DynamicComment">
+        select
+        <include refid="Base_Column_List"/>
+        from fc_dynamic_comment
+       <where>
+       	del_flag = 0
+       	<if test="dynaId!=null">
+       		and dyna_id = #{dynaId}
+       	</if>
+       </where>
+       order by addtime desc
+    </select>
+    
+    <insert id="insertComment">
+        insert into fc_dynamic_comment (
+	        id,
+			dyna_id,
+			user_id,
+			content,
+			addtime,
+			del_flag
+        )value(
+            #{id},
+            #{dynaId},
+            #{userId},
+            #{content},
+            #{addtime},
+            #{delFlag}
+        )
+    </insert>
+
+    <update id="deleteDynamicCommentById">
+        update fc_dynamic_comment
+        set del_flag = ${delFlag},del_time=${delTime}
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+
+</mapper>

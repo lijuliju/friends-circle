@@ -1,0 +1,71 @@
+#服务端口及模块名
+server:
+  port: 8080
+  servlet:
+    context-path: /friends
+
+spring:
+#数据源配置
+  datasource:
+    name: sp
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/friends_circle?characterEncoding=utf8&useSSL=false
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+  mvc: 
+    static-path-pattern: /**
+  resources: 
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+  jackson:
+    #时间戳统一转换
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+
+    serialization: 
+      write-dates-as-timestamps: true
+          
+mybatis-plus:
+#默认扫描mapper.xml的目录
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliaes-packages: com.friends.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#Mybatis 显示sql语句配置
+#logging:
+  #level: 
+    #com.friends.*: debug
+logging:
+  config: classpath:log4j2.xml
+  level:
+    java.sql: debug
+    com.apache.ibatis: debug
+    com.friends: debug
+    com.friends.dao.*: debug
+    cn.jay.repository: trace
+
+
+friends:
+  icon-url: /public/img/icon.jpg
+  background: /public/img/background.jpg
+  scheduler:
+    # 定时器触发时间
+    cron: 0 0 * * 1 ? 
+  
+#分页pageHelper
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
