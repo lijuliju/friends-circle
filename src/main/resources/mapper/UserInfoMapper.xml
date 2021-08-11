@@ -35,11 +35,11 @@
     <update id="updateUserInfoById">
         update fc_user_info
         <set>
-        	<if test="pushCount!=null and pushCount!=0 ">
-        		push_count =${pushCount}
+        	<if test="pushCount!=null  and pushCount >=0 ">
+        		push_count =${pushCount},
         	</if>
-        	<if test="praisedCount!=null and praisedCount!=0 ">
-        		,praised_count=${praisedCount}
+        	<if test="praisedCount!=null and praisedCount >=0 ">
+        		praised_count=${praisedCount},
         	</if>
         </set>
         <where>

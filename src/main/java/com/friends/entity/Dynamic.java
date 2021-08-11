@@ -2,13 +2,12 @@ package com.friends.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.github.pagehelper.PageInfo;
 
 import lombok.Data;
 
 import java.util.List;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -53,6 +52,8 @@ public class Dynamic{
     
     private List<DynamicComment> dynamicCommentList;	// 评论信息
     
+    private PageInfo<DynamicComment> dynamicCommentPage;	// 评论信息
+    
     private List<DynamicLike> dynamicLikeList;	// 点赞信息
     
     private String userIds;
@@ -71,5 +72,15 @@ public class Dynamic{
     @NotNull(message = "地址不能为空")
     private String address;	// 地址
     
+    private Long likeFlag = 0l;	// 登陆者是否点赞，默认为0 未点赞；1 已点赞
+    
+    private Long shareCount = 0l;	// 动态分享次数
+    
+    private DynamicLike currentUserLike;	// 当前登录用户点赞记录
+    
+    private Boolean collectVisible = false;	// 是否收藏
+    
+    private List<Long> dynaIdList;
+
 }
 

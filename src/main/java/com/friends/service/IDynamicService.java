@@ -24,4 +24,10 @@ public interface IDynamicService {
   // 更新点赞数
   public void updateLikeCount(Long likeCount,Long weekLikeCount,Long dynaId);
   
+  // 更新分享数
+  public void updateShareCount(Dynamic dynamicParam,Dynamic dynamicExist);
+  
+  //更新收藏标识
+  public void updateCollectVisible(Boolean collectVisible,Dynamic dynamicExist);
+  
 }

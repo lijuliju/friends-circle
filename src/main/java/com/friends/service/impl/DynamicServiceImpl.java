@@ -3,8 +3,10 @@ package com.friends.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.friends.dao.DynamicLikeMapper;
 import com.friends.dao.DynamicMapper;
 import com.friends.entity.Dynamic;
+import com.friends.entity.DynamicLike;
 import com.friends.service.IDynamicService;
 import com.github.pagehelper.PageHelper;
 
@@ -20,13 +22,17 @@ public class DynamicServiceImpl implements IDynamicService {
 	@Autowired
     private DynamicMapper dynamicMapper;
 	
+	@Autowired
+    private DynamicLikeMapper dynamicLikeMapper;
+	
 	@Override
 	public List<Dynamic> getMomentMessageList(int page,int pageNumber,Boolean isHot,Dynamic dynamic) {
 //		int page = dynamic.getPage();
 //		int pageNumber = dynamic.getPageNumber();
 		String orderBy = isHot?"week_like_count desc,addtime desc":"addtime desc";
 		PageHelper.startPage(page, pageNumber,orderBy);
-		return dynamicMapper.findMomentMessageList(dynamic);
+		List<Dynamic> dynamicList = dynamicMapper.findMomentMessageList(dynamic);
+		return dynamicList;
 	}
 
 	@Override
@@ -37,6 +43,7 @@ public class DynamicServiceImpl implements IDynamicService {
 		momenstMessage.setCommentCount(0l);
 		momenstMessage.setEnable(0l);
 		momenstMessage.setWeekLikeCount(0l);
+		momenstMessage.setShareCount(0l);
 		dynamicMapper.insert(momenstMessage);
 	}
 
@@ -68,6 +75,26 @@ public class DynamicServiceImpl implements IDynamicService {
 		dynamic.setLikeCount(likeCount);
 		dynamic.setWeekLikeCount(weekLikeCount);
 		dynamicMapper.updateDynamicById(dynamic);
+	}
+
+	@Override
+	public void updateShareCount(Dynamic dynamicParam,Dynamic dynamicExist) {
+//		Dynamic dynamic = new Dynamic();
+//		dynamic.setId(dynaId);
+//		
+//		Dynamic dynamicExist = dynamicMapper.findMomentMessagetById(dynamic);
+		Long shareCount = dynamicExist.getShareCount();
+		shareCount = null!= shareCount?shareCount:0l;
+		shareCount = shareCount+1;
+		
+		dynamicParam.setShareCount(shareCount);
+		dynamicMapper.updateDynamicById(dynamicParam);
+	}
+
+	@Override
+	public void updateCollectVisible(Boolean collectVisible, Dynamic dynamicExist) {
+		dynamicExist.setCollectVisible(collectVisible);;
+		dynamicMapper.updateDynamicById(dynamicExist);
 	}
 
 	

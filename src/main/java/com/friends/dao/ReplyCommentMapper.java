@@ -16,4 +16,8 @@ public interface ReplyCommentMapper extends BaseMapper<DynamicComment> {
 	
 	public int deleteReplyById(DynamicComment momentsComment);
 	
+	public DynamicComment findReplyCommentById(DynamicComment dynamicComment);
+	
+	public int updateLikeCountById(DynamicComment dynamicComment);
+	
 }

@@ -47,5 +47,19 @@ public class LikeServiceImpl implements ILikeService {
 		return momentLikeDAO.findDynamicLikeList(dynamicLike);
 	}
 
+	@Override
+	public List<DynamicLike> findDynamicLikeBy(Long userId,Long dynaId) {
+		DynamicLike dynamicLike = new DynamicLike();
+		dynamicLike.setDynaId(dynaId);
+		dynamicLike.setUserId(userId);
+		return momentLikeDAO.findDynamicLikeList(dynamicLike);
+	}
+
+	@Override
+	public List<DynamicLike> findDynamicLikeList(DynamicLike dynamicLike) {
+		return momentLikeDAO.findDynamicLikeList(dynamicLike);
+	}
+
+
 
 }

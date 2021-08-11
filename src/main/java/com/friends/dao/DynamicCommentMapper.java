@@ -12,8 +12,12 @@ public interface DynamicCommentMapper extends BaseMapper<DynamicComment> {
 	
 	public List<DynamicComment> findDynamicCommentList(DynamicComment dynamicComment);
 	
+	public DynamicComment findDynamicCommentById(DynamicComment dynamicComment);
+	
 	public int insertComment(DynamicComment dynamicComment);
 	
-	public int deleteDynamicCommentById(DynamicComment dynamicComment);
+	public int updateDynamicCommentById(DynamicComment dynamicComment);
+	
+//	public int updateLikeCountById(DynamicComment dynamicComment);
 	
 }

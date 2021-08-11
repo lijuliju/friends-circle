@@ -2,21 +2,14 @@ package com.friends.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.friends.util.AbstractEntity;
+import com.github.pagehelper.PageInfo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
-import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * 评论表
@@ -46,6 +39,29 @@ public class DynamicComment{
     private Long delFlag;
     
     private Long comId;
+    
+    private Long likeFlag = 0l;// 登陆者是否点赞，默认为0 未点赞；1 已点赞
+    
+    private Long likeCount;// 评论的点赞数
+    
+    private Long replyCount = 0l;// 评论回复总数
+    
+    private List<DynamicLike> dynamicLikeList;
+    
+    private List<DynamicComment> replyList;
+    
+    private PageInfo<DynamicComment> replyPage;
+    
+    private DynamicLike currentUserLike;
+    
+    private Long replyPid;
+    
+    private String picture;
+    
+    private boolean hasParent = false;
+    
+    private DynamicComment replyParent;
+
     
 }
 

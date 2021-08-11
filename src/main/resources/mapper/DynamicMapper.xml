@@ -3,69 +3,71 @@
 <mapper namespace="com.friends.dao.DynamicMapper">
 
     <sql id="Base_Column_List">
-        id,
-		user_id as userId,
-		content,
-		area_code as areaCode,
-		like_count as likeCount,
-		week_like_count as weekLikeCount,
-		detail_addr as detailAddr,
-		comment_count as commentCount,
-		enable,
-		type,
-		picture_list as pictureList,
-		video_list as videoList,
-		province,
-		city,
-		area,
-		address,
-		addtime
+        d.id,
+		d.user_id as userId,
+		d.content,
+		d.area_code as areaCode,
+		d.like_count as likeCount,
+		d.week_like_count as weekLikeCount,
+		d.comment_count as commentCount,
+		d.enable,
+		d.type,
+		d.picture_list as pictureList,
+		d.video_list as videoList,
+		d.province,
+		d.city,
+		d.area,
+		d.address,
+		d.addtime,
+		d.share_count as shareCount
     </sql>
 
     <sql id="userOrganizationJoins">
     </sql>
 
-    <select
-        id="findMomentMessageList"
-        resultType="com.friends.entity.Dynamic">
+    <select id="findMomentMessageList" resultType="com.friends.entity.Dynamic">
         select
         <include refid="Base_Column_List"/>
-        from fc_dynamic
+        from fc_dynamic d 
        <where>
-       	enable = 0
+       	d.enable = 0
+       	<if test="type !=null and type !=''">
+       		and d.type = #{type}
+       	</if>
+       	<if test="province !=null and province !=''">
+       		and d.province = #{province}
+       	</if>
+       		<if test="city !=null and city !=''">
+       		and d.city = #{city}
+       	</if>
+       		<if test="area !=null and area !=''">
+       		and d.area = #{area}
+       	</if>
        	<if test="userIds!=null and userIds!=''">
-       		and user_id in 
+       		and d.user_id in 
        		 <foreach item="userId" collection="userIds.split(',')" separator="," open="(" close=")" index="">
 		      	#{userId}
 		     </foreach>
        	</if>
        	<if test="content !=null and content !=''">
-       		and content ilike CONCAT('%', #{content}, '%')
+       		and d.content ilike CONCAT('%', #{content}, '%')
        	</if>
-       	<if test="type !=null and type !=''">
-       		and type = #{type}
-       	</if>
-       	<if test="province !=null and province !=''">
-       		and province = #{province}
-       	</if>
-       		<if test="city !=null and city !=''">
-       		and city = #{city}
-       	</if>
-       		<if test="area !=null and area !=''">
-       		and area = #{area}
+       	<if test="dynaIdList !=null ">
+       		and d.id in 
+       		 <foreach item="dynaId" collection="dynaIdList" separator="," open="(" close=")" index="">
+		      	#{dynaId}
+		     </foreach>
        	</if>
        </where>
-       order by addtime desc
+       order by d.addtime desc
     </select>
     
-    <select
-        id="findMomentMessagetById"
-        resultType="com.friends.entity.Dynamic">
+    <select id="findMomentMessagetById" resultType="com.friends.entity.Dynamic">
         select
-        <include refid="Base_Column_List"/>
-        from fc_dynamic 
+        	<include refid="Base_Column_List"/>
+        from fc_dynamic  d 
        <where>
-       		id =  #{id}
+       		d.id = #{id}
        </where>
     </select>
 
@@ -87,7 +89,8 @@
 			city,
 			area,
 			address,
-			addtime
+			addtime,
+			share_count
         )value(
             #{id},
             #{userId},
@@ -105,7 +108,8 @@
             #{city},
             #{area},
             #{address},
-            #{addtime}
+            #{addtime},
+            #{shareCount}
         )
     </insert>
 
@@ -120,15 +124,17 @@
     <update id="updateDynamicById">
         update fc_dynamic
         <set>
-        	<if test="commentCount!=null and commentCount!=0 ">
-        		comment_count =${commentCount}
+        	<if test="commentCount!=null and commentCount >=0">
+        		comment_count =${commentCount},
         	</if>
-        	<if test="likeCount!=null and likeCount!=0 ">
-        		,like_count=${likeCount}
-        		
+        	<if test="shareCount!=null and shareCount >=0 ">
+        		share_count =${shareCount},
         	</if>
-        	<if test="weekLikeCount!=null and weekLikeCount!=0 ">
-        		,week_like_count=${weekLikeCount}
+        	<if test="likeCount!=null and likeCount >=0">
+        		like_count=${likeCount},
+        	</if>
+        	<if test="weekLikeCount!=null and weekLikeCount >=0">
+        		week_like_count=${weekLikeCount},
         	</if>
         </set>
         <where>

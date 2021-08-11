@@ -2,21 +2,9 @@ package com.friends.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.friends.util.AbstractEntity;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * 点赞表
@@ -35,6 +23,10 @@ public class DynamicLike{
     
 	@NotNull(message = "点赞用户唯一标识不能为空")
     private Long userId;
+	
+	private Long commentId;
+	
+	private Long replyId;
     
     private Long addtime;
     
